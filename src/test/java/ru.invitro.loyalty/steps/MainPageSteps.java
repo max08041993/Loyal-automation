@@ -51,7 +51,18 @@ public class MainPageSteps {
     @Then("^Проверяю что на странице отображается заголовок (.*)$")
     public void headerPage(String value) {
         Assert.assertEquals("Неверный заголовок. Ожидается: " + value + ". Отображается " + loyalPage.headerPage(), loyalPage.headerPage(), value);
-//        assertionSteps.softAssertIsEquals("Неверный заголовок. Ожидается: " + value + ". Отображается " + loyalPage.headerPage(), loyalPage.headerPage(), value);
     }
+
+//    @When("^В карточке справочника Ввожу в поле (.*) сгенерированное\\(ую\\) (ФИО|Имя|Фамилию|Отчество)$")
+//    public void sendCardInInputRandom(String fieldName, String name) {
+//        entityPage.sendCardInInputRandom(fieldName, name);
+//    }
+//
+//    @When("^В карточке справочника Ввожу в поле (.*) рандомную дату$")
+//    public void sendCardInInputRandom(String fieldName) {
+//        String value = rmsPage.randomDateGeneration();
+//        entityPage.sendCardInInputDate(fieldName, value);
+//    }
+
 
 }

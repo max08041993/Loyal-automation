@@ -4,10 +4,7 @@ package ru.invitro.loyalty.pages;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 
@@ -101,6 +98,60 @@ public class LoyalPage extends PageObject {
         return headerPage.getText();
     }
 
+    public void jsClick(WebElementFacade webElement) {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].click();", webElement);
+    }
+
+    private boolean elementInViewPort(WebElementFacade element) {
+        Dimension screenSize = getDriver().manage().window().getSize();
+        try {
+            Long y = (Long) ((JavascriptExecutor) getDriver()).executeScript(
+                    "var elem = arguments[0],                 " +
+                            "  box = elem.getBoundingClientRect();    " +
+                            "return box.top;                            "
+                    , element);
+            return y < screenSize.getHeight() - 200 && y > 200;
+        } catch (ClassCastException e) {
+            Double y = (Double) ((JavascriptExecutor) getDriver()).executeScript(
+                    "var elem = arguments[0],                 " +
+                            "  box = elem.getBoundingClientRect();    " +
+                            "return box.top;                            "
+                    , element);
+            return y < screenSize.getHeight() - 200 && y > 200;
+        }
+    }
+
+    public void scrollToElement(WebElementFacade element) {
+        if (!elementInViewPort(element)) {
+            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", element);
+            scrollToElement(element, 0, -400);
+        }
+    }
+
+    public void scrollToElement(WebElementFacade element, int x, int y) {
+        if (!elementInViewPort(element)) {
+            String code = "window.scroll(" + (element.getLocation().x + x) + ","
+                    + (element.getLocation().y + y) + ");";
+            ((JavascriptExecutor) getDriver()).executeScript(code, element, x, y);
+        }
+    }
+
+    public boolean checkElementList(List<WebElementFacade> elementList, int checkCount) {
+        int count = 0;
+        waitABit(2000);
+        while (true) {
+            if (elementList.size() <= 0) {
+                waitABit(1000);
+                count++;
+            } else {
+                return true;
+            }
+            if (count >= checkCount) {
+                return false;
+            }
+        }
+    }
 
 
 }
