@@ -53,6 +53,11 @@ public class MainPageSteps {
         Assert.assertEquals("Неверный заголовок. Ожидается: " + value + ". Отображается " + loyalPage.headerPage(), loyalPage.headerPage(), value);
     }
 
+    @Then("^В таблице поиска в поле (.*) нажимаю на значение (.*)$")
+    public void openSend(String type, String value){
+        loyalPage.openSend(type,value);
+    }
+
 //    @When("^В карточке справочника Ввожу в поле (.*) сгенерированное\\(ую\\) (ФИО|Имя|Фамилию|Отчество)$")
 //    public void sendCardInInputRandom(String fieldName, String name) {
 //        entityPage.sendCardInInputRandom(fieldName, name);
@@ -63,6 +68,8 @@ public class MainPageSteps {
 //        String value = rmsPage.randomDateGeneration();
 //        entityPage.sendCardInInputDate(fieldName, value);
 //    }
+
+
 
 
 }

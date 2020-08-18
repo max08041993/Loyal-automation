@@ -19,8 +19,6 @@ public class CuponPage extends LoyalPage {
     @FindBys({@FindBy(xpath = "//form[@id='CouponForm']/div[not(contains(@class,'hidden'))]//label")})
     List<WebElementFacade> listFullNameInputCupon;
 
-//    By listFullNameInputCuponPath = By.xpath("//form[@id='CouponForm']/div[not(contains(@class,'hidden'))]//label");
-
     By inputNameInputCupon = By.xpath("./../descendant::div[contains(@class,'col-md')][1]//*[@name][@id]");
 
     By oneNamesVerySelectCupon = By.xpath("./following::ul[@aria-expanded='true']//span[1]");
@@ -55,11 +53,50 @@ public class CuponPage extends LoyalPage {
     @FindBys({@FindBy(xpath = "//div[contains(text(),'Добавить исключение:')]/button")}) // меню выбора параметров в полях выбора
     List<WebElementFacade> ParameEception;
 
+    @FindBy(xpath = "//textarea[@id='block-reason']")
+    WebElementFacade inputPrichina;
+
+    @FindBy(xpath = "//div[@class='modal-footer']/button[.='Заблокировать']")
+    WebElementFacade buttonModalBlock;
+
+    @FindBys(@FindBy(xpath = "//div[@id='includedItems']//div[@class='text-muted item-description']/span"))
+    List<WebElementFacade> nameLispAddProduct;
+
+    @FindBys(@FindBy(xpath = "//div[@id='excludedItems']//div[@class='text-muted item-description']/span"))
+    List<WebElementFacade> nameLispNotProduct;
+
+    By buttonListProduct = By.xpath("./../following-sibling::*//button[@type='button'][@data-toggle]");
+
+    By inputElementProduct = By.xpath("./../following-sibling::*//button[@type='button'][@data-toggle][@aria-expanded='true']/..//input");
+
+    By seachElement = By.xpath("./../following-sibling::*//ul[@aria-expanded='true']//li[not(contains(@class,'hidden'))][@data-original-index='1']");
+
+    @FindBy(xpath = "//div[@id='includedItems']//button[.='Добавить']")
+    WebElementFacade buttonAddSpisEnty;
+
+    @FindBy(xpath = "//div[@id='excludedItems']//button[.='Добавить']")
+    WebElementFacade buttonAddSpisIskl;
+
+    @FindBys(@FindBy(xpath = "//div[@class='col-sm-6 pl0 pr0']//table[@class='item-contents']//div"))
+    List<WebElementFacade> listAddNames;
+
+    @FindBys(@FindBy(xpath = "//div[@class='col-sm-6 bl pl0 pr0']//table[@class='item-contents']//div"))
+    List<WebElementFacade> listNotNames;
+
+    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//button[@type='button']"))
+    List<WebElementFacade> listFullNameButton;
+
+    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label[.='Данные купона']/following::*//table//td"))
+    List<WebElementFacade> listFullTdInCupon;
+
+
     public void clickCreate() {
         jsClick(сreate);
         blockGeograf.waitUntilNotVisible();
         return;
     }
+
+    //    By listFullNameInputCuponPath = By.xpath("//form[@id='CouponForm']/div[not(contains(@class,'hidden'))]//label");
 
     public void sendValueCupons(String fieldName, String value) {
 //        List<WebElementFacade> listFullNameInputCupon = findAll(listFullNameInputCuponPath);
@@ -101,8 +138,6 @@ public class CuponPage extends LoyalPage {
         checkSeachRegion.waitUntilVisible().click();
         return;
     }
-
-
 
     public void selectValueOffice(String fieldName, String value) {
         for (WebElementFacade fullName : listFullNameSelectParam) {
@@ -155,24 +190,6 @@ public class CuponPage extends LoyalPage {
         Assert.fail("Не найдена кнопка " + value);
     }
 
-    @FindBys(@FindBy(xpath = "//div[@id='includedItems']//div[@class='text-muted item-description']/span"))
-    List<WebElementFacade> nameLispAddProduct;
-
-    @FindBys(@FindBy(xpath = "//div[@id='excludedItems']//div[@class='text-muted item-description']/span"))
-    List<WebElementFacade> nameLispNotProduct;
-
-    By buttonListProduct = By.xpath("./../following-sibling::*//button[@type='button'][@data-toggle]");
-
-    By inputElementProduct = By.xpath("./../following-sibling::*//button[@type='button'][@data-toggle][@aria-expanded='true']/..//input");
-
-    By seachElement = By.xpath("./../following-sibling::*//ul[@aria-expanded='true']//li[not(contains(@class,'hidden'))][@data-original-index='1']");
-
-    @FindBy(xpath = "//div[@id='includedItems']//button[.='Добавить']")
-    WebElementFacade buttonAddSpisEnty;
-
-    @FindBy(xpath = "//div[@id='excludedItems']//button[.='Добавить']")
-    WebElementFacade buttonAddSpisIskl;
-
     public void seachAndAddProductAdd(String type, String value){
         for (WebElementFacade fullNamePole : nameLispAddProduct) {
             System.out.println(fullNamePole.getText());
@@ -185,7 +202,6 @@ public class CuponPage extends LoyalPage {
                 inputPoleSeach.sendKeys(value);
                 waitABit(1000);
                 WebElementFacade seachAccurate = fullNamePole.find(seachElement);
-//                jsClick(seachAccurate);
                 seachAccurate.waitUntilVisible().click();
                 if (isDisplayed(buttonAddSpisEnty)) {
                     buttonAddSpisEnty.click();
@@ -208,7 +224,6 @@ public class CuponPage extends LoyalPage {
                 inputPoleSeach.sendKeys(value);
                 waitABit(1000);
                 WebElementFacade seachAccurate = fullNamePole.find(seachElement);
-//                jsClick(seachAccurate);
                 seachAccurate.waitUntilVisible().click();
                 if (isDisplayed(buttonAddSpisIskl)) {
                     buttonAddSpisIskl.click();
@@ -218,10 +233,6 @@ public class CuponPage extends LoyalPage {
         }
         Assert.fail("Не найдено поле " + type);
     }
-
-
-    @FindBys(@FindBy(xpath = "//div[@class='col-sm-6 pl0 pr0']//table[@class='item-contents']//div"))
-    List<WebElementFacade> listAddNames;
 
     public Boolean checkListsProductAdd(String listOjid) {
         waitABit(1000);
@@ -234,9 +245,6 @@ public class CuponPage extends LoyalPage {
         return false;
     }
 
-    @FindBys(@FindBy(xpath = "//div[@class='col-sm-6 bl pl0 pr0']//table[@class='item-contents']//div"))
-    List<WebElementFacade> listNotNames;
-
     public Boolean checkListsProductNot(String listOjid) {
         waitABit(1000);
         Assert.assertTrue("Кнопки не обнаружены", checkElementList(listNotNames, 3));
@@ -247,5 +255,56 @@ public class CuponPage extends LoyalPage {
         }
         return false;
     }
+
+    public Boolean checkCuponDan(String ddButtons) {
+        waitABit(350);
+        Assert.assertTrue("На странице таблица с данными Купона не обнаружена", checkElementList(listFullTdInCupon, 3));
+        for (WebElementFacade element : listFullTdInCupon) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean checkButtonsCupon(String ddButtons){
+        waitABit(350);
+        Assert.assertTrue("На странице кнопок не обнаружено", checkElementList(listFullNameButton, 3));
+        for (WebElementFacade element : listFullNameButton) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
+    public void clickButtonsCupon(String ddButtons){
+        waitABit(350);
+        Assert.assertTrue("На странице кнопок не обнаружено", checkElementList(listFullNameButton, 3));
+        for (WebElementFacade element : listFullNameButton) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    element.click();
+                    return;
+                }
+            }
+        }
+    }
+
+
+    public void stndTextAndBlockCupon(String value){
+        inputPrichina.click();
+        inputPrichina.clear();
+        inputPrichina.sendKeys(value);
+        buttonModalBlock.click();
+        return;
+    }
+
+
 
 }

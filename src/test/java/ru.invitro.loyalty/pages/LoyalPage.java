@@ -8,7 +8,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -33,6 +36,34 @@ public class LoyalPage extends PageObject {
 
     By directoryMenuPath = By.xpath("./following::ul[1]/li/a");
 
+    @FindBy(xpath = "//input[@type='search']")
+    WebElementFacade cardQuery;
+
+    @FindBy(xpath = "//input[@id='cardQuery']")
+    WebElementFacade seachInInputAndButton;
+
+    @FindBy(xpath = "//button[@type='submit']")
+    WebElementFacade buttonSubmit;
+
+    @FindBys({@FindBy(xpath = "//table[@id='DataTables_Table_0']/thead//th")}) //Названия столбцов в таблице Купонов
+    List<WebElementFacade> columnsOnProducts;
+
+    By entryTableRowsPath = By.xpath("//table[@id='DataTables_Table_0']/tbody/tr"); //таблицы результатов
+
+    By entryTableCellsPath = By.xpath("./td/*"); // ячейки таблицы результатов
+
+    @FindBy(xpath = "//li[@id='mainDataTable_next']/*")
+    WebElementFacade buttonNext;
+
+    By linkSeach = (By.xpath("./..//a"));
+
+    @FindBys({@FindBy(xpath = "//div[@id='main']//thead//th")}) //Названия столбцов в таблице Тиражей
+    List<WebElementFacade> columnsTiragOnProducts;
+
+    By entryTiragTableRowsPath = By.xpath("//div[@id='main']//tbody/tr"); //Значение в таблице Тиражей
+
+    By entryTiragTableCellsPath = By.xpath("./td"); // ячейки таблицы результатов
+
 
     public void waitSomeTime(long time) {
         waitABit(time);
@@ -47,6 +78,7 @@ public class LoyalPage extends PageObject {
     }
 
     public void openDirectoriesName(String name, String value) {
+        waitABit(500);
         for (WebElementFacade medInfoRow : listFullNameDerictores) {
             if (medInfoRow.getText().replaceAll("[\r\n]", " ").equals(name)) {
                 List<WebElementFacade> directoryMenu = medInfoRow.thenFindAll(directoryMenuPath);
@@ -74,8 +106,8 @@ public class LoyalPage extends PageObject {
                 return;
             }
         }
-            Assert.fail("Региона " + nameRegion + " не существует");
-        }
+        Assert.fail("Региона " + nameRegion + " не существует");
+    }
 
     public void scrollToUp() {
         ((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, 0)");
@@ -153,5 +185,104 @@ public class LoyalPage extends PageObject {
         }
     }
 
+    public Boolean columnsOnTable(String ddButtons) {
+        waitABit(350);
+        Assert.assertTrue("Столбцы не обнаружены", checkElementList(columnsOnProducts, 3));
+        for (WebElementFacade element : columnsOnProducts) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Map<String, WebElementFacade>> collectEntryTabe() {
+        List<Map<String, WebElementFacade>> table = new ArrayList<>();
+        List<String> tableHeaders = new ArrayList<>();
+        for (WebElementFacade tableHeaderElement : columnsOnProducts) {
+            if (tableHeaderElement.getText().equals(" ")) {
+                tableHeaders.add("*");
+            } else {
+                tableHeaders.add(tableHeaderElement.getText().trim());
+            }
+        }
+        for (WebElementFacade tableRowElement : findAll(entryTableRowsPath)) {
+            List<WebElementFacade> cells = tableRowElement.thenFindAll(entryTableCellsPath);
+            Map<String, WebElementFacade> row = new HashMap<>();
+            for (int i = 0; i < cells.size(); i++) {
+                row.put(tableHeaders.get(i), cells.get(i));
+            }
+            table.add(row);
+        }
+        return table;
+    }
+
+    public void openSend(String header, String value) {
+        for (Map<String, WebElementFacade> tableRow : collectEntryTabe()) {
+            Assert.assertTrue("Таблица не содержит столбец " + header, tableRow.containsKey(header));
+            if (tableRow.get(header).getText().contains(value)) {
+                WebElementFacade searchedElement = tableRow.get(header);
+                searchedElement.waitUntilClickable().click();
+                return;
+            }
+        }
+        Assert.fail("В столбце " + header + " не найдено значение " + value);
+    }
+
+    public List<Map<String, WebElementFacade>> collectTiragEntryTabe() {
+        List<Map<String, WebElementFacade>> table = new ArrayList<>();
+        List<String> tableHeaders = new ArrayList<>();
+        for (WebElementFacade tableHeaderElement : columnsTiragOnProducts) {
+            if (tableHeaderElement.getText().equals(" ")) {
+                tableHeaders.add("*");
+            } else {
+                tableHeaders.add(tableHeaderElement.getText().trim());
+            }
+        }
+        for (WebElementFacade tableRowElement : findAll(entryTiragTableRowsPath)) {
+            List<WebElementFacade> cells = tableRowElement.thenFindAll(entryTiragTableCellsPath);
+            Map<String, WebElementFacade> row = new HashMap<>();
+            for (int i = 0; i < cells.size(); i++) {
+                row.put(tableHeaders.get(i), cells.get(i));
+            }
+            table.add(row);
+        }
+        return table;
+    }
+
+    public void sendAndOpenCuponStatus(String header, String value) {
+        while (true) {
+            for (Map<String, WebElementFacade> tableRow : collectTiragEntryTabe()) {
+                if (tableRow.get(header).getText().contains(value)) {
+                    WebElementFacade searchedElement = tableRow.get(header);
+                    WebElementFacade clicSearchedElement = searchedElement.find(linkSeach);
+                    clicSearchedElement.waitUntilClickable().click();
+                    return;
+                }
+            }
+                if (buttonNext.isClickable()) {
+                    buttonNext.waitUntilClickable().click();
+                } else {
+                    break;
+                }
+        }
+        Assert.fail("В столбце " + header + " не найдено значение " + value);
+
+    }
+
+    public void sendNumberCupon(String value) {
+        seachInInputAndButton.click();
+        seachInInputAndButton.clear();
+        seachInInputAndButton.sendKeys(value);
+        buttonSubmit.click();
+    }
+
+    public void sendNumberEditionCupon(String value) {
+        cardQuery.click();
+        cardQuery.clear();
+        cardQuery.sendKeys(value);
+    }
 
 }

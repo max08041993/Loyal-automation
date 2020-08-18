@@ -11,7 +11,7 @@ public class CuponsSteps {
 
     CuponPage cuponPage;
 
-    @When("^Нажимаю кнопку Создать$")
+    @When("^Нажимаю Создать$")
     public void clickCreate(){
         cuponPage.clickCreate();
     }
@@ -79,7 +79,51 @@ public class CuponsSteps {
         }
     }
 
+    @When("^Произвожу поиск по номеру Купона (.*)$")
+    public void sendNumberCupon(String value){
+        cuponPage.sendNumberCupon(value);
+    }
 
+    @When("^Проверяю что отображается таблица со следующими полями:$")
+    public void checkThatTableIsVisible(List<String> columns) {
+        for (String ddButtons : columns) {
+            Assert.assertTrue("Отсутсвует столбец " + ddButtons, cuponPage.columnsOnTable(ddButtons));
+        }
+    }
+
+    @When("^Проверяю что Данные купона и События лояльности содержат следующие строки:$")
+    public void checkCuponDan(List<String> listsNames) {
+        for (String listNames : listsNames) {
+            Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCuponDan(listNames));
+        }
+    }
+
+    @When("^Проверяю что на странице присутствует кнопка$")
+    public void checkButtonsCupon(List<String> listsNames) {
+        for (String listNames : listsNames) {
+            Assert.assertTrue("Кнопка(и) " + listNames + " не обнаружены на странице", cuponPage.checkButtonsCupon(listNames));
+        }
+    }
+
+    @When("^В поле поиска Тиражей купонов ввожу (.*) и произвожу поиск$")
+    public void sendNumberEditionCupon(String value){
+        cuponPage.sendNumberEditionCupon(value);
+    }
+
+    @When("^В таблице Тиража в поле (.*) нахожу элемент со значением (.*) и открываю его$")
+    public void sendAndOpenCuponStatus(String type,String value){
+        cuponPage.sendAndOpenCuponStatus(type,value);
+    }
+
+    @When("^Нажимаю кнопку (.*)$")
+    public void clickBlock(String value){
+        cuponPage.clickButtonsCupon(value);
+    }
+
+    @When("^Ввожу причину блокировки (.*) и Блокирую купон$")
+    public void stndTextAndBlockCupon(String value){
+        cuponPage.stndTextAndBlockCupon(value);
+    }
 
 
 }
