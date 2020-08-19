@@ -181,4 +181,17 @@ public class CuponsSteps {
         cuponPage.sendCommentarAndSendNext(value);
     }
 
+    @When("^Не Ввожу комментарий в блоке операция над тиражом и нажимаю Продолжить$")
+    public void sendNotCommentarAndSendNextFail(){
+        cuponPage.sendNotCommentarAndSendNextFail();
+    }
+
+    @When("^Проверяю что вышла окно Внимание с текстом:$")
+    public void checkFailWindowText(List<String> listsNames) {
+        for (String listNames : listsNames) {
+            Assert.assertTrue("Текст: " + listNames + " в окне не обнаружен", cuponPage.checkFailWindowText(listNames));
+        }
+        cuponPage.clicButtonOk();
+    }
+
 }

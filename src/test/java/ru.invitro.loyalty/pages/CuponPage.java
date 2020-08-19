@@ -363,29 +363,45 @@ public class CuponPage extends LoyalPage {
         buttonSave.waitUntilClickable().click();
     }
 
-    By textSeriaDublicat = By.xpath("./..//span[@class='field-validation-error']");
+    @FindBy(xpath = "//label[.='Номер серии']/..//span[@class='field-validation-error'][@data-valmsg-replace='true']")
+            WebElementFacade errorMessageDublication;
 
     public void fixErrorDuplication() {
         boolean aaa = true;
         while (aaa) {
-            if (!listFullNameInputCupon.isEmpty()) {
-                for (WebElementFacade medInfoRow : listFullNameInputCupon) {
-                    if (medInfoRow.getText().equals("Номер серии")) {
-                        WebElementFacade directoryMenu = medInfoRow.find(textSeriaDublicat);
-                        System.out.println(directoryMenu.getText());
-                        if (directoryMenu.getText().contains("Серия пересекается с номерами")) {
-                            sendValueRandom();
-                            Serie.sendKeys(Keys.ENTER);
-//                            waitABit(500);
-//                            buttonSave.click();
-                            waitABit(1000);
-                            aaa = false;
-                        } else aaa = true;
-                    } else aaa = true;
-                }
-            } else aaa = true;
+            waitABit(1000);
+            if(errorMessageDublication.isVisible()) {
+                System.out.println(errorMessageDublication.getText());
+                if (errorMessageDublication.getText().contains("Серия пересекается с номерами")) {
+                    sendValueRandom();
+                    Serie.sendKeys(Keys.ENTER);
+                    waitABit(1000);
+                    aaa = true;
+                } else aaa = false;
+            }else aaa = false;
         }
     }
+
+//    public void fixErrorDuplication() {
+//        boolean aaa = true;
+//        while (aaa) {
+//            waitABit(2000);
+//            if (!listFullNameInputCupon.isEmpty()) {
+//                for (WebElementFacade medInfoRow : listFullNameInputCupon) {
+//                    if (medInfoRow.getText().equals("Номер серии")) {
+//                        WebElementFacade directoryMenu = medInfoRow.find(textSeriaDublicat);
+//                        System.out.println(directoryMenu.getText());
+//                        if (directoryMenu.getText().contains("Серия пересекается с номерами")) {
+//                            sendValueRandom();
+//                            Serie.sendKeys(Keys.ENTER);
+//                            waitABit(1000);
+//                            aaa = true;
+//                        } else aaa = false;
+//                    } else aaa = false;
+//                }
+//            } else aaa = false;
+//        }
+//    }
 
     @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label/following::dl/*"))
     List<WebElementFacade> listFullInfoEdition;
@@ -413,10 +429,42 @@ public class CuponPage extends LoyalPage {
     WebElementFacade blockModalFog;
 
     public void sendCommentarAndSendNext(String value){
+        inputComment.waitUntilVisible();
+        waitABit(1000);
         inputComment.click();
         inputComment.sendKeys(value);
         buttonNextComment.click();
         blockModalFog.waitUntilNotVisible();
+    }
+
+    public void sendNotCommentarAndSendNextFail(){
+        inputComment.waitUntilVisible();
+        waitABit(1000);
+        inputComment.click();
+        buttonNextComment.click();
+    }
+
+    @FindBys(@FindBy(xpath = "//div[@class='jconfirm-content-pane']"))
+    List<WebElementFacade> textFailWindow;
+
+    public boolean checkFailWindowText(String ddButtons){
+        waitABit(350);
+        Assert.assertTrue("На странице кнопок не обнаружено", checkElementList(textFailWindow, 3));
+        for (WebElementFacade element : textFailWindow) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
+    @FindBy(xpath = "//button[@type='button'][.='ok']")
+    WebElementFacade buttonOk;
+
+    public void clicButtonOk(){
+        buttonOk.waitUntilClickable().click();
     }
 
 }
