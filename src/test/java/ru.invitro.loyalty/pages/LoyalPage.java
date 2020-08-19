@@ -3,19 +3,24 @@ package ru.invitro.loyalty.pages;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.annotations.Shared;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
+import ru.invitro.loyalty.driver.SaveData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
 public class LoyalPage extends PageObject {
+
+    @Shared
+    SaveData saveData;
 
     @FindBy(xpath = "//h2")
     WebElementFacade headerPage;
@@ -283,6 +288,63 @@ public class LoyalPage extends PageObject {
         cardQuery.click();
         cardQuery.clear();
         cardQuery.sendKeys(value);
+    }
+
+    public String generationRandomMumber9() {
+        int min = 100000000;
+        int max = 999999999;
+        int diff = max - min;
+        Random random = new Random();
+        int randomMumber9 = random.nextInt(diff + 1);
+        randomMumber9 += min;
+        return String.valueOf(randomMumber9);
+    }
+
+    public String currentDateAndHour() {
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter timeColonFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String dataStr = formatter.format(currentDate);
+        String timeStr = timeColonFormatter.format(currentTime);
+        String dataAndTimeNow = dataStr + " " + timeStr;
+        return dataAndTimeNow;
+    }
+
+    public String yesterdayDate() {
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dataStr = formatter.format(yesterdayDate);
+        return dataStr;
+    }
+
+    public String yesterdayDateAndHour() {
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalTime currentTime = LocalTime.now();
+        DateTimeFormatter timeColonFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String dataStr = formatter.format(yesterdayDate);
+        String timeStr = timeColonFormatter.format(currentTime);
+        String dataAndTimeYesterday = dataStr + " " + timeStr;
+        return dataAndTimeYesterday;
+    }
+
+    public String tomorrowDate() {
+        LocalDate tomorrowDate = LocalDate.now().plusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dataStr = formatter.format(tomorrowDate);
+        return dataStr;
+    }
+
+    public String tomorrowDateAndHour() {
+        LocalDate tomorrowDate = LocalDate.now().plusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalTime currentTime = LocalTime.now();
+        DateTimeFormatter timeColonFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String dataStr = formatter.format(tomorrowDate);
+        String timeStr = timeColonFormatter.format(currentTime);
+        String dataAndTimeTomorrow = dataStr + " " + timeStr;
+        return dataAndTimeTomorrow;
     }
 
 }

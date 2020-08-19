@@ -58,16 +58,6 @@ public class MainPageSteps {
         loyalPage.openSend(type,value);
     }
 
-//    @When("^В карточке справочника Ввожу в поле (.*) сгенерированное\\(ую\\) (ФИО|Имя|Фамилию|Отчество)$")
-//    public void sendCardInInputRandom(String fieldName, String name) {
-//        entityPage.sendCardInInputRandom(fieldName, name);
-//    }
-//
-//    @When("^В карточке справочника Ввожу в поле (.*) рандомную дату$")
-//    public void sendCardInInputRandom(String fieldName) {
-//        String value = rmsPage.randomDateGeneration();
-//        entityPage.sendCardInInputDate(fieldName, value);
-//    }
 
 
 

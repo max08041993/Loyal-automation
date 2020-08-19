@@ -3,6 +3,7 @@ package ru.invitro.loyalty.pages;
 import net.serenitybdd.core.pages.WebElementFacade;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 
@@ -16,7 +17,7 @@ public class CuponPage extends LoyalPage {
     @FindBy(xpath = "//div[@class='geography-fog']")
     WebElementFacade blockGeograf;
 
-    @FindBys({@FindBy(xpath = "//form[@id='CouponForm']/div[not(contains(@class,'hidden'))]//label")})
+    @FindBys({@FindBy(xpath = "//form[@class='form-horizontal']/div[not(contains(@class,'hidden'))]//label")})
     List<WebElementFacade> listFullNameInputCupon;
 
     By inputNameInputCupon = By.xpath("./../descendant::div[contains(@class,'col-md')][1]//*[@name][@id]");
@@ -113,23 +114,44 @@ public class CuponPage extends LoyalPage {
         Assert.fail("Не найдено поле " + fieldName);
     }
 
-    public void selectValueCupons(String fieldName, String value) {
+    @FindBys(@FindBy(xpath = "//form[@class='form-horizontal']/div[not(contains(@class,'hidden'))]//label/following::ul[@aria-expanded='true']//span[1]"))
+    List<WebElementFacade> listSelectAaa;
+
+    public void selectValueCupons(String fieldName,String value) {
 //        List<WebElementFacade> listFullNameInputCupon = findAll(listFullNameInputCuponPath);
         for (WebElementFacade fullName : listFullNameInputCupon) {
             if (fullName.getText().contains(fieldName)) {
                 WebElementFacade clickOneCupon = fullName.findBy(oneNameSelectCupon);
                 jsClick(clickOneCupon);
-                WebElementFacade selectValue = fullName.find(oneNamesVerySelectCupon);
-                if (selectValue.getText().contains(value)) {
-                    selectValue.click();
-                    waitABit(200);
-                    return;
+                for (WebElementFacade listSelect : listSelectAaa) {
+                    if (listSelect.getText().contains(value)) {
+                        listSelect.click();
+                        waitABit(200);
+                        return;
+                    }
                 }
-                Assert.fail("Не найдено значение " + value);
             }
         }
         Assert.fail("Не найдено поле " + fieldName);
     }
+
+    @FindBys(@FindBy(xpath = "//label[.='Шаблон тиража']/..//option"))
+    List<WebElementFacade> blockPatternEdition;
+
+    @FindBy(xpath = "//label[.='Шаблон тиража']/following::select[@id='PrintingTemplateId']")
+    WebElementFacade buttonPatternEdition;
+
+    public void selectPatternEdition(String type){
+        buttonPatternEdition.click();
+        for (WebElementFacade fullType : blockPatternEdition) {
+            if (fullType.getText().equals(type)) {
+                fullType.click();
+                return;
+            }
+        }
+        Assert.fail("Не найден шаблон тиража " + type);
+    }
+
 
     public void selectGeografCupons(String value) {
         inputSendRegion.click();
@@ -170,7 +192,6 @@ public class CuponPage extends LoyalPage {
 
     public void clickParamAddEntry(String value){
         for (WebElementFacade fullName : ParamEntry) {
-            System.out.println(fullName.getText());
             if (fullName.getText().contains(value)) {
                 fullName.click();
                 return;
@@ -181,7 +202,6 @@ public class CuponPage extends LoyalPage {
 
     public void clickParameNotEception(String value){
         for (WebElementFacade fullName : ParameEception) {
-            System.out.println(fullName.getText());
             if (fullName.getText().contains(value)) {
                 fullName.click();
                 return;
@@ -192,7 +212,6 @@ public class CuponPage extends LoyalPage {
 
     public void seachAndAddProductAdd(String type, String value){
         for (WebElementFacade fullNamePole : nameLispAddProduct) {
-            System.out.println(fullNamePole.getText());
             if (fullNamePole.getText().contains(type)) {
                 WebElementFacade sendCardInInput = fullNamePole.find(buttonListProduct);
                 sendCardInInput.click();
@@ -214,7 +233,6 @@ public class CuponPage extends LoyalPage {
 
     public void seachAndAddProductNot(String type, String value){
         for (WebElementFacade fullNamePole : nameLispNotProduct) {
-            System.out.println(fullNamePole.getText());
             if (fullNamePole.getText().contains(type)) {
                 WebElementFacade sendCardInInput = fullNamePole.find(buttonListProduct);
                 sendCardInInput.click();
@@ -288,7 +306,7 @@ public class CuponPage extends LoyalPage {
         Assert.assertTrue("На странице кнопок не обнаружено", checkElementList(listFullNameButton, 3));
         for (WebElementFacade element : listFullNameButton) {
             if (isDisplayed(element)) {
-                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                if (element.getText().equals(ddButtons)) {
                     element.click();
                     return;
                 }
@@ -305,6 +323,100 @@ public class CuponPage extends LoyalPage {
         return;
     }
 
+    @FindBy(xpath = "//input[@id='Serie']")
+    WebElementFacade Serie;
 
+    public void sendValueRandom(){
+        Serie.click();
+        Serie.clear();
+        Serie.sendKeys(generationRandomMumber9());
+    }
+
+    @FindBy(xpath = "//input[@id='AvailableFrom']")
+    WebElementFacade AvailableFrom;
+
+    public void sendValueDate(String tupe) {
+        AvailableFrom.click();
+        AvailableFrom.clear();
+        AvailableFrom.sendKeys(tupe);
+    }
+
+    By errorText = By.xpath("./..//span[@id]");
+
+    public boolean errorTirag(String type,String value) {
+        waitABit(500);
+        for (WebElementFacade medInfoRow : listFullNameInputCupon) {
+            if (medInfoRow.getText().equals(type)) {
+                WebElementFacade directoryMenu = medInfoRow.find(errorText);
+                if(directoryMenu.getText().equals(value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @FindBy(xpath = "//*[@value='Сохранить']")
+    WebElementFacade buttonSave;
+
+    public void clickbuttonSave(){
+        buttonSave.waitUntilClickable().click();
+    }
+
+    By textSeriaDublicat = By.xpath("./..//span[@class='field-validation-error']");
+
+    public void fixErrorDuplication() {
+        boolean aaa = true;
+        while (aaa) {
+            if (!listFullNameInputCupon.isEmpty()) {
+                for (WebElementFacade medInfoRow : listFullNameInputCupon) {
+                    if (medInfoRow.getText().equals("Номер серии")) {
+                        WebElementFacade directoryMenu = medInfoRow.find(textSeriaDublicat);
+                        System.out.println(directoryMenu.getText());
+                        if (directoryMenu.getText().contains("Серия пересекается с номерами")) {
+                            sendValueRandom();
+                            Serie.sendKeys(Keys.ENTER);
+//                            waitABit(500);
+//                            buttonSave.click();
+                            waitABit(1000);
+                            aaa = false;
+                        } else aaa = true;
+                    } else aaa = true;
+                }
+            } else aaa = true;
+        }
+    }
+
+    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label/following::dl/*"))
+    List<WebElementFacade> listFullInfoEdition;
+
+    public Boolean checkInfoIsEdition(String ddListInfo) {
+        waitABit(350);
+        Assert.assertTrue("На странице таблица с данными по тиражу не найдена", checkElementList(listFullInfoEdition, 3));
+        for (WebElementFacade element : listFullInfoEdition) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddListInfo)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
+    @FindBy(xpath = "//input[@placeholder='Комментарий']")
+    WebElementFacade inputComment;
+
+    @FindBy(xpath = "//button[.='Продолжить']")
+    WebElementFacade buttonNextComment;
+
+    @FindBy(xpath = "//div[@class='fog modal-fog fog-top0 fog-fixed'][@style='display: block;']")
+    WebElementFacade blockModalFog;
+
+    public void sendCommentarAndSendNext(String value){
+        inputComment.click();
+        inputComment.sendKeys(value);
+        buttonNextComment.click();
+        blockModalFog.waitUntilNotVisible();
+    }
 
 }

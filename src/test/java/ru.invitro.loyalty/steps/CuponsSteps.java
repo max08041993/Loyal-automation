@@ -26,6 +26,11 @@ public class CuponsSteps {
         cuponPage.selectValueCupons(pole,value);
     }
 
+    @When("^Выбираю Шаблон тиража значение (.*) на странице создания тиража Купонов$")
+    public void selectPatternEdition(String value){
+        cuponPage.selectPatternEdition(value);
+    }
+
     @When("^В поле поиска блока География применения ввожу (.*) и произвожу поиск и отмечаю найденое значение$")
     public void selectGeografCupons(String value){
         cuponPage.selectGeografCupons(value);
@@ -125,5 +130,55 @@ public class CuponsSteps {
         cuponPage.stndTextAndBlockCupon(value);
     }
 
+    @When("^Ввожу в поле Номер серии рандомное число из 9 знаков$")
+    public void sendValueRandom(){
+        cuponPage.sendValueRandom();
+    }
+
+    @When("^Ввожу в поле Дата-время активации (Текущую|Вчерашнюю|Завтрашнюю) дату и время$")
+    public void sendDateAndTime(String value){
+        switch (value){
+            case ("Текущую"):
+                String tupe = cuponPage.currentDateAndHour();
+                System.out.println(true);
+                cuponPage.sendValueDate(tupe);
+                break;
+            case ("Вчерашнюю"):
+                String yesterday = cuponPage.yesterdayDateAndHour();
+                cuponPage.sendValueDate(yesterday);
+                break;
+            case ("Завтрашнюю"):
+                String tomorrow = cuponPage.tomorrowDateAndHour();
+                cuponPage.sendValueDate(tomorrow);
+                break;
+        }
+    }
+
+    @When("^Проверяю что в поле (.*) отображается ошибка (.*)$")
+    public void errorTirag(String type, String value){
+        Assert.assertTrue("Ошибка " + value + " не обнаружена",cuponPage.errorTirag(type,value));
+    }
+
+    @When("Нажимаю Сохранить")
+    public void clickbuttonSave(){
+        cuponPage.clickbuttonSave();
+    }
+
+    @When("Проверяю наличие ошибки пересечения серии с номерами и исправляю её")
+    public void fixErrorDuplication(){
+        cuponPage.fixErrorDuplication();
+    }
+
+    @When("^Проверяю что информация по Тиражу купонов содержит следующие строки:$")
+    public void checkInfoIsEdition(List<String> listsNames){
+        for (String listNames : listsNames) {
+            Assert.assertTrue("В информации по тиражу купонов не обнаружено " + listNames, cuponPage.checkInfoIsEdition(listNames));
+        }
+    }
+
+    @When("^Ввожу комментарий (.*) в блоке операция над тиражом и нажимаю Продолжить$")
+    public void sendCommentarAndSendNext(String value){
+        cuponPage.sendCommentarAndSendNext(value);
+    }
 
 }
