@@ -57,6 +57,12 @@ public class MainPageSteps {
     }
 
 
+    @When("^Произвожу поиск по номеру Купона или Дисконтной карты (.*)$")
+    public void sendNumberCupon(String value){
+        loyalPage.sendNumberCupon(value);
+    }
+
+
 
 
 

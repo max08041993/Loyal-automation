@@ -211,9 +211,11 @@ public class CuponPage extends LoyalPage {
 
     public void selectGeografCupons(String value) {
         inputSendRegion.click();
+        inputSendRegion.clear();
         inputSendRegion.sendKeys(value);
         buttonSeachRegion.click();
         checkSeachRegion.waitUntilVisible().click();
+        waitABit(1500);
     }
 
     public void selectValueOffice(String fieldName, String value) {
@@ -345,6 +347,22 @@ public class CuponPage extends LoyalPage {
         waitABit(350);
         Assert.assertTrue("На странице таблица с данными Купона не обнаружена", checkElementList(listFullTdInCupon, 3));
         for (WebElementFacade element : listFullTdInCupon) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
+    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label[.='Данные карты']/following::*//table//td"))
+    List<WebElementFacade> cardDan;
+
+    public Boolean checkCardDan(String ddButtons) {
+        waitABit(350);
+        Assert.assertTrue("На странице таблица с данными Карты не обнаружена", checkElementList(cardDan, 3));
+        for (WebElementFacade element : cardDan) {
             if (isDisplayed(element)) {
                 if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
                     return isDisplayed(element);
