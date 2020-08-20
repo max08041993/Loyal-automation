@@ -2,7 +2,9 @@ package ru.invitro.loyalty.steps;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import net.thucydides.core.annotations.Shared;
 import org.junit.Assert;
+import ru.invitro.loyalty.driver.SaveData;
 import ru.invitro.loyalty.pages.CuponPage;
 
 import java.util.List;
@@ -11,6 +13,9 @@ public class CuponsSteps {
 
     CuponPage cuponPage;
 
+    @Shared
+    SaveData saveData;
+
     @When("^Нажимаю Создать$")
     public void clickCreate(){
         cuponPage.clickCreate();
@@ -18,6 +23,11 @@ public class CuponsSteps {
 
     @When("^Ввожу в поле (.*) значение (.*) на странице создания тиража Купонов$")
     public void sendValueCupons(String pole, String value){
+        if (pole.equals("Срок действия")){
+            int number = Integer.parseInt (value);
+            saveData.setNumderDeyActions(number);
+            System.out.println(saveData.getNumderDeyActions());
+        }
         cuponPage.sendValueCupons(pole,value);
     }
 
@@ -28,6 +38,9 @@ public class CuponsSteps {
 
     @When("^Выбираю Шаблон тиража значение (.*) на странице создания тиража Купонов$")
     public void selectPatternEdition(String value){
+        if (value.equals("Сохраненное значение")){
+            value = saveData.getNameRandom();
+        }
         cuponPage.selectPatternEdition(value);
     }
 
@@ -60,7 +73,7 @@ public class CuponsSteps {
 
     @When("^В блоке добавления вхождения продуктов к (.*) ввожу или выбираю искомый элемент (.*) и Добавляю элемент$")
     public void seachAndAddProductAdd(String type, String value){
-        cuponPage.seachAndAddProductAdd(type,value);
+        cuponPage.searchAndAddProductAdd(type,value);
     }
 
     @When("^В блоке добавления исключения продуктов к (.*) ввожу или выбираю искомый элемент (.*) и Добавляю элемент$")
@@ -99,7 +112,7 @@ public class CuponsSteps {
     @When("^Проверяю что Данные купона и События лояльности содержат следующие строки:$")
     public void checkCuponDan(List<String> listsNames) {
         for (String listNames : listsNames) {
-            Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCuponDan(listNames));
+            Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCouponDan(listNames));
         }
     }
 
@@ -166,7 +179,8 @@ public class CuponsSteps {
 
     @When("Проверяю наличие ошибки пересечения серии с номерами и исправляю её")
     public void fixErrorDuplication(){
-        cuponPage.fixErrorDuplication();
+//        cuponPage.fixErrorDuplication();
+        saveData.setRandomNumber9(cuponPage.fixErrorDuplication());
     }
 
     @When("^Проверяю что информация по Тиражу купонов содержит следующие строки:$")
@@ -193,5 +207,38 @@ public class CuponsSteps {
         }
         cuponPage.clicButtonOk();
     }
+
+    @When("^Ввожу в поле (.*) рандомное значение на странице создания тиража Купонов$")
+    public void sendRandomNameTirag(String type){
+        saveData.setNameRandom(cuponPage.sendRandomNameTirag(type));
+        System.out.println(saveData.getNameRandom());
+    }
+
+    @When("^Проверяю что Дата активации купона равен текущей дате$")
+    public void checkDataCuponValueNow(){
+        String dataNow = cuponPage.currentDateNow();
+            Assert.assertTrue("Дата активации купона не равна текущей", cuponPage.checkDataCuponValueNow(dataNow));
+    }
+
+    @When("^Проверяю что Срок действия купона равен сроку действия в шаблоне$")
+    public void checkValidCupon(){
+        String dataNow = cuponPage.exactDate(saveData.getNumderDeyActions());
+        Assert.assertTrue("Срок действия купона не равен значению в шаблоне тиража", cuponPage.checkValidCupon(dataNow));
+    }
+
+    @When("^В поле Применимость к продукту ввожу (.*) и нажимаю Проверить$")
+    public void sendValuePrimenimost(String value){
+        cuponPage.sendValuePrimenimost(value);
+    }
+
+    @When("^Проверяю что блок Проверка правила содержит текст:$")
+    public void checkRulesProduct(List<String> listsNames){
+        for (String listNames : listsNames) {
+            Assert.assertTrue("Отсутсвует строка " + listNames + " в блоке проверки применимости продукта", cuponPage.checkRulesProduct(listNames));
+        }
+    }
+
+
+
 
 }

@@ -10,8 +10,6 @@ public class MainPageSteps {
 
     LoyalPage loyalPage;
 
-    AssertionSteps assertionSteps;
-
     @Given("^Открываю страницу Loyal$")
     public void openMainPage() {
         loyalPage.open();
@@ -39,7 +37,7 @@ public class MainPageSteps {
     }
 
     @Then("^Открываю в блоке (.*) страницу (.*)$")
-    public void openDerectoresName(String name, String value) {
+    public void openDirectoriesName(String name, String value) {
         loyalPage.openDirectoriesName(name, value);
     }
 
