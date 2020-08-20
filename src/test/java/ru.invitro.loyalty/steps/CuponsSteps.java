@@ -97,11 +97,6 @@ public class CuponsSteps {
         }
     }
 
-    @When("^Произвожу поиск по номеру Купона (.*)$")
-    public void sendNumberCupon(String value){
-        cuponPage.sendNumberCupon(value);
-    }
-
     @When("^Проверяю что отображается таблица со следующими полями:$")
     public void checkThatTableIsVisible(List<String> columns) {
         for (String ddButtons : columns) {
@@ -113,6 +108,13 @@ public class CuponsSteps {
     public void checkCuponDan(List<String> listsNames) {
         for (String listNames : listsNames) {
             Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCouponDan(listNames));
+        }
+    }
+
+    @When("^Проверяю что Данные карты и События лояльности содержат следующие строки:$")
+    public void checkCardDan(List<String> listsNames) {
+        for (String listNames : listsNames) {
+            Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCardDan(listNames));
         }
     }
 

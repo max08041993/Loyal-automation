@@ -354,6 +354,22 @@ public class CuponPage extends LoyalPage {
         return false;
     }
 
+    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label[.='Данные карты']/following::*//table//td"))
+    List<WebElementFacade> cardDan;
+
+    public Boolean checkCardDan(String ddButtons) {
+        waitABit(350);
+        Assert.assertTrue("На странице таблица с данными Карты не обнаружена", checkElementList(cardDan, 3));
+        for (WebElementFacade element : cardDan) {
+            if (isDisplayed(element)) {
+                if (element.getText().replaceAll("[\r\n]", " ").equals(ddButtons)) {
+                    return isDisplayed(element);
+                }
+            }
+        }
+        return false;
+    }
+
 
     public boolean checkButtonsCupon(String ddButtons){
         waitABit(350);
