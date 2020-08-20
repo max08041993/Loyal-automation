@@ -1,4 +1,4 @@
-@test @Contacts
+@test @Orders
 
 #  https://invitro.atlassian.net/browse/LOY-186
 
