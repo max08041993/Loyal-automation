@@ -18,9 +18,18 @@ public class ContactPage extends LoyalPage {
 
     By inputSeach = By.xpath("./following::input");
 
+    @FindBy(xpath = "//input[@type='checkbox']")
+    WebElementFacade checkBoxNotActiv;
+
+    @FindBy(xpath = "//td[.='В таблице отсутствуют данные']")
+    WebElementFacade textNullTabl;
+
     public void sendSeach(){
         buttonSubmit.click();
     }
+
+    @FindBy(xpath = "//a[@role='button']")
+    WebElementFacade buttonClear;
 
     public void seachValueInPage(String type, String value){
         for (WebElementFacade fullName : listLabelSeach) {
@@ -60,7 +69,6 @@ public class ContactPage extends LoyalPage {
     public boolean seachValyeInTable(String header, String value) {
         for (Map<String, WebElementFacade> tableRow : collectContactTabe()) {
             Assert.assertTrue("Таблица не содержит столбец " + header, tableRow.containsKey(header));
-            System.out.println(tableRow.get(header).getText());
             if (tableRow.get(header).getText().replaceAll("[\r\n]", " ").equals(value)) {
                 return true;
             }
@@ -69,22 +77,14 @@ public class ContactPage extends LoyalPage {
         return false;
     }
 
-    @FindBy(xpath = "//a[@role='button']")
-    WebElementFacade buttonClear;
-
     public void clickbuttonClear(){
         buttonClear.click();
     }
-
-    @FindBy(xpath = "//td[.='В таблице отсутствуют данные']")
-    WebElementFacade textNullTabl;
 
     public void textNullTabl(){
         isDisplayed(textNullTabl);
     }
 
-    @FindBy(xpath = "//input[@id='showDeleted']")
-    WebElementFacade checkBoxNotActiv;
 
     public void clickcheckBoxNotActiv(){
         checkBoxNotActiv.click();
