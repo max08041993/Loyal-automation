@@ -7,12 +7,13 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CuponPage extends LoyalPage {
 
     @FindBy(xpath = "//a[.='Создать']")
-    WebElementFacade сreate;
+    WebElementFacade Create;
 
     @FindBy(xpath = "//div[@class='geography-fog']")
     WebElementFacade blockGeograf;
@@ -22,7 +23,6 @@ public class CuponPage extends LoyalPage {
 
     By inputNameInputCupon = By.xpath("./../descendant::div[contains(@class,'col-md')][1]//*[@name][@id]");
 
-    By oneNamesVerySelectCupon = By.xpath("./following::ul[@aria-expanded='true']//span[1]");
     By oneNameSelectCupon = By.xpath("./following::span[@class='filter-option pull-left']");
 
     @FindBy(xpath = "//input[@id='TreeSearch']")
@@ -90,11 +90,76 @@ public class CuponPage extends LoyalPage {
     @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label[.='Данные купона']/following::*//table//td"))
     List<WebElementFacade> listFullTdInCupon;
 
+    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label/following::dl/*"))
+    List<WebElementFacade> listFullInfoEdition;
+
+    @FindBys(@FindBy(xpath = "//form[@class='form-horizontal']/div[not(contains(@class,'hidden'))]//label/following::ul[@aria-expanded='true']//span[1]"))
+    List<WebElementFacade> listSelectAaa;
+
+    @FindBys(@FindBy(xpath = "//label[.='Шаблон тиража']/..//option"))
+    List<WebElementFacade> blockPatternEdition;
+
+    @FindBy(xpath = "//label[.='Шаблон тиража']/following::select[@id='PrintingTemplateId']")
+    WebElementFacade buttonPatternEdition;
+
+    @FindBy(xpath = "//input[@id='AvailableFrom']")
+    WebElementFacade AvailableFrom;
+
+    @FindBy(xpath = "//input[@id='Serie']")
+    WebElementFacade Serie;
+
+    @FindBy(xpath = "//*[@value='Сохранить']")
+    WebElementFacade buttonSave;
+
+    public void clickbuttonSave(){
+        scrollToElement(buttonSave);
+        buttonSave.waitUntilClickable().click();
+    }
+
+    @FindBy(xpath = "//label[.='Номер серии']/..//span[@class='field-validation-error'][@data-valmsg-replace='true']")
+    WebElementFacade errorMessageDublication;
+
+    @FindBy(xpath = "//input[@placeholder='Комментарий']")
+    WebElementFacade inputComment;
+
+    @FindBy(xpath = "//button[.='Продолжить']")
+    WebElementFacade buttonNextComment;
+
+    @FindBy(xpath = "//div[@class='fog modal-fog fog-top0 fog-fixed'][@style='display: block;']")
+    WebElementFacade blockModalFog;
+
+    @FindBys(@FindBy(xpath = "//div[@class='jconfirm-content-pane']"))
+    List<WebElementFacade> textFailWindow;
+
+    @FindBy(xpath = "//button[@type='button'][.='ok']")
+    WebElementFacade buttonOk;
+
+    @FindBy(xpath = "//input[@id='SearchProduct']")
+    WebElementFacade inputSearchProduct;
+
+    @FindBy(xpath = "//button[.='Проверить']")
+    WebElementFacade buttonCheck;
+
+    @FindBy(xpath = "//td[.='Срок действия']/following-sibling::td")
+    WebElementFacade tdDayValidCupon;
+
+    @FindBy(xpath = "//td[.='Дата активации']/following-sibling::td")
+    WebElementFacade tdDayActiv;
+
+    By errorText = By.xpath("./..//span[@id]");
+
+    @FindBy(xpath = "//input[@id='Name']")
+    WebElementFacade inputName;
+
+    @FindBys(@FindBy(xpath = "//span[.='Проверка правила']/following::b"))
+    List<WebElementFacade> listRulesProduct;
+
+    @FindBy(xpath = "//button[@type='button'][.='OK']")
+    WebElementFacade buttonOK;
 
     public void clickCreate() {
-        jsClick(сreate);
+        jsClick(Create);
         blockGeograf.waitUntilNotVisible();
-        return;
     }
 
     //    By listFullNameInputCuponPath = By.xpath("//form[@id='CouponForm']/div[not(contains(@class,'hidden'))]//label");
@@ -114,9 +179,6 @@ public class CuponPage extends LoyalPage {
         Assert.fail("Не найдено поле " + fieldName);
     }
 
-    @FindBys(@FindBy(xpath = "//form[@class='form-horizontal']/div[not(contains(@class,'hidden'))]//label/following::ul[@aria-expanded='true']//span[1]"))
-    List<WebElementFacade> listSelectAaa;
-
     public void selectValueCupons(String fieldName,String value) {
 //        List<WebElementFacade> listFullNameInputCupon = findAll(listFullNameInputCuponPath);
         for (WebElementFacade fullName : listFullNameInputCupon) {
@@ -135,12 +197,6 @@ public class CuponPage extends LoyalPage {
         Assert.fail("Не найдено поле " + fieldName);
     }
 
-    @FindBys(@FindBy(xpath = "//label[.='Шаблон тиража']/..//option"))
-    List<WebElementFacade> blockPatternEdition;
-
-    @FindBy(xpath = "//label[.='Шаблон тиража']/following::select[@id='PrintingTemplateId']")
-    WebElementFacade buttonPatternEdition;
-
     public void selectPatternEdition(String type){
         buttonPatternEdition.click();
         for (WebElementFacade fullType : blockPatternEdition) {
@@ -158,7 +214,6 @@ public class CuponPage extends LoyalPage {
         inputSendRegion.sendKeys(value);
         buttonSeachRegion.click();
         checkSeachRegion.waitUntilVisible().click();
-        return;
     }
 
     public void selectValueOffice(String fieldName, String value) {
@@ -210,18 +265,18 @@ public class CuponPage extends LoyalPage {
         Assert.fail("Не найдена кнопка " + value);
     }
 
-    public void seachAndAddProductAdd(String type, String value){
+    public void searchAndAddProductAdd(String type, String value){
         for (WebElementFacade fullNamePole : nameLispAddProduct) {
             if (fullNamePole.getText().contains(type)) {
                 WebElementFacade sendCardInInput = fullNamePole.find(buttonListProduct);
                 sendCardInInput.click();
-                WebElementFacade inputPoleSeach = fullNamePole.find(inputElementProduct);
-                inputPoleSeach.click();
-                inputPoleSeach.clear();
-                inputPoleSeach.sendKeys(value);
+                WebElementFacade inputPoleSearch = fullNamePole.find(inputElementProduct);
+                inputPoleSearch.click();
+                inputPoleSearch.clear();
+                inputPoleSearch.sendKeys(value);
                 waitABit(1000);
-                WebElementFacade seachAccurate = fullNamePole.find(seachElement);
-                seachAccurate.waitUntilVisible().click();
+                WebElementFacade searchAccurate = fullNamePole.find(seachElement);
+                searchAccurate.waitUntilVisible().click();
                 if (isDisplayed(buttonAddSpisEnty)) {
                     buttonAddSpisEnty.click();
                     }
@@ -252,8 +307,20 @@ public class CuponPage extends LoyalPage {
         Assert.fail("Не найдено поле " + type);
     }
 
+    public Boolean checkRulesProduct(String listOjid){
+        waitABit(700);
+        Assert.assertTrue("Блок Проверки правила не видим", checkElementList(listRulesProduct, 3));
+        for (WebElementFacade element : listRulesProduct) {
+            if (element.getText().equals(listOjid)) {
+                buttonOK.click();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean checkListsProductAdd(String listOjid) {
-        waitABit(1000);
+        waitABit(300);
         Assert.assertTrue("Кнопки не обнаружены", checkElementList(listAddNames, 3));
         for (WebElementFacade element : listAddNames) {
             if (element.getText().equals(listOjid)) {
@@ -264,7 +331,7 @@ public class CuponPage extends LoyalPage {
     }
 
     public Boolean checkListsProductNot(String listOjid) {
-        waitABit(1000);
+        waitABit(300);
         Assert.assertTrue("Кнопки не обнаружены", checkElementList(listNotNames, 3));
         for (WebElementFacade element : listNotNames) {
             if (element.getText().equals(listOjid)) {
@@ -274,7 +341,7 @@ public class CuponPage extends LoyalPage {
         return false;
     }
 
-    public Boolean checkCuponDan(String ddButtons) {
+    public Boolean checkCouponDan(String ddButtons) {
         waitABit(350);
         Assert.assertTrue("На странице таблица с данными Купона не обнаружена", checkElementList(listFullTdInCupon, 3));
         for (WebElementFacade element : listFullTdInCupon) {
@@ -320,28 +387,30 @@ public class CuponPage extends LoyalPage {
         inputPrichina.clear();
         inputPrichina.sendKeys(value);
         buttonModalBlock.click();
-        return;
     }
 
-    @FindBy(xpath = "//input[@id='Serie']")
-    WebElementFacade Serie;
-
-    public void sendValueRandom(){
+    public String sendValueRandom(){
         Serie.click();
         Serie.clear();
-        Serie.sendKeys(generationRandomMumber9());
+        String number = generationRandomMumber9();
+        Serie.sendKeys(number);
+        return number;
     }
 
-    @FindBy(xpath = "//input[@id='AvailableFrom']")
-    WebElementFacade AvailableFrom;
+    public String sendNameRandom(){
+        inputName.click();
+        inputName.clear();
+        String name = generationRandomName();
+        inputName.sendKeys(name);
+        return name;
+    }
 
-    public void sendValueDate(String tupe) {
+    public void sendValueDate(String type) {
         AvailableFrom.click();
         AvailableFrom.clear();
-        AvailableFrom.sendKeys(tupe);
+        AvailableFrom.sendKeys(type);
     }
 
-    By errorText = By.xpath("./..//span[@id]");
 
     public boolean errorTirag(String type,String value) {
         waitABit(500);
@@ -356,77 +425,36 @@ public class CuponPage extends LoyalPage {
         return false;
     }
 
-    @FindBy(xpath = "//*[@value='Сохранить']")
-    WebElementFacade buttonSave;
-
-    public void clickbuttonSave(){
-        buttonSave.waitUntilClickable().click();
-    }
-
-    @FindBy(xpath = "//label[.='Номер серии']/..//span[@class='field-validation-error'][@data-valmsg-replace='true']")
-            WebElementFacade errorMessageDublication;
-
-    public void fixErrorDuplication() {
-        boolean aaa = true;
-        while (aaa) {
+    public String fixErrorDuplication() {
+        String number = "";
+        LocalDateTime startTime = LocalDateTime.now();
+        while (buttonSave.isVisible() && startTime.plusMinutes(15).isAfter(LocalDateTime.now())) {
             waitABit(1000);
-            if(errorMessageDublication.isVisible()) {
+            if (errorMessageDublication.isVisible()) {
                 System.out.println(errorMessageDublication.getText());
                 if (errorMessageDublication.getText().contains("Серия пересекается с номерами")) {
-                    sendValueRandom();
+                    number = sendValueRandom();
                     Serie.sendKeys(Keys.ENTER);
                     waitABit(1000);
-                    aaa = true;
-                } else aaa = false;
-            }else aaa = false;
-        }
-    }
-
-//    public void fixErrorDuplication() {
-//        boolean aaa = true;
-//        while (aaa) {
-//            waitABit(2000);
-//            if (!listFullNameInputCupon.isEmpty()) {
-//                for (WebElementFacade medInfoRow : listFullNameInputCupon) {
-//                    if (medInfoRow.getText().equals("Номер серии")) {
-//                        WebElementFacade directoryMenu = medInfoRow.find(textSeriaDublicat);
-//                        System.out.println(directoryMenu.getText());
-//                        if (directoryMenu.getText().contains("Серия пересекается с номерами")) {
-//                            sendValueRandom();
-//                            Serie.sendKeys(Keys.ENTER);
-//                            waitABit(1000);
-//                            aaa = true;
-//                        } else aaa = false;
-//                    } else aaa = false;
-//                }
-//            } else aaa = false;
-//        }
-//    }
-
-    @FindBys(@FindBy(xpath = "//div[@class='panel panel-default']//label/following::dl/*"))
-    List<WebElementFacade> listFullInfoEdition;
-
-    public Boolean checkInfoIsEdition(String ddListInfo) {
-        waitABit(350);
-        Assert.assertTrue("На странице таблица с данными по тиражу не найдена", checkElementList(listFullInfoEdition, 3));
-        for (WebElementFacade element : listFullInfoEdition) {
-            if (isDisplayed(element)) {
-                if (element.getText().replaceAll("[\r\n]", " ").equals(ddListInfo)) {
-                    return isDisplayed(element);
                 }
             }
         }
-        return false;
+        Assert.assertTrue("",startTime.plusMinutes(15).isAfter(LocalDateTime.now()));
+        return number;
     }
 
-    @FindBy(xpath = "//input[@placeholder='Комментарий']")
-    WebElementFacade inputComment;
-
-    @FindBy(xpath = "//button[.='Продолжить']")
-    WebElementFacade buttonNextComment;
-
-    @FindBy(xpath = "//div[@class='fog modal-fog fog-top0 fog-fixed'][@style='display: block;']")
-    WebElementFacade blockModalFog;
+        public Boolean checkInfoIsEdition (String ddListInfo){
+            waitABit(350);
+            Assert.assertTrue("На странице таблица с данными по тиражу не найдена", checkElementList(listFullInfoEdition, 3));
+            for (WebElementFacade element : listFullInfoEdition) {
+                if (isDisplayed(element)) {
+                    if (element.getText().replaceAll("[\r\n]", " ").equals(ddListInfo)) {
+                        return isDisplayed(element);
+                    }
+                }
+            }
+            return false;
+        }
 
     public void sendCommentarAndSendNext(String value){
         inputComment.waitUntilVisible();
@@ -444,9 +472,6 @@ public class CuponPage extends LoyalPage {
         buttonNextComment.click();
     }
 
-    @FindBys(@FindBy(xpath = "//div[@class='jconfirm-content-pane']"))
-    List<WebElementFacade> textFailWindow;
-
     public boolean checkFailWindowText(String ddButtons){
         waitABit(350);
         Assert.assertTrue("На странице кнопок не обнаружено", checkElementList(textFailWindow, 3));
@@ -460,11 +485,49 @@ public class CuponPage extends LoyalPage {
         return false;
     }
 
-    @FindBy(xpath = "//button[@type='button'][.='ok']")
-    WebElementFacade buttonOk;
-
     public void clicButtonOk(){
         buttonOk.waitUntilClickable().click();
+    }
+
+    public String sendRandomNameTirag(String type) {
+        String name = "";
+        for (WebElementFacade fullName : listFullNameInputCupon) {
+            if (fullName.getText().equals(type)) {
+                WebElementFacade sendCardInInput = fullName.findBy(inputNameInputCupon);
+                scrollToElement(sendCardInInput);
+                name = sendNameRandom();
+                return name;
+            }
+        }
+        Assert.fail("Не найдено поле " + type);
+        return name;
+    }
+
+    public boolean checkDataCuponValueNow(String dataNow) {
+        if (isDisplayed(tdDayActiv)) {
+            if (tdDayActiv.getText().replaceAll("[\r\n]", " ").contains(dataNow)) {
+                return isDisplayed(tdDayActiv);
+            }
+        }
+        return false;
+    }
+
+    public boolean checkValidCupon(String dataNow) {
+        if (isDisplayed(tdDayValidCupon)) {
+            if (tdDayValidCupon.getText().replaceAll("[\r\n]", " ").contains(dataNow)) {
+                return isDisplayed(tdDayValidCupon);
+            }
+        }
+        return false;
+    }
+
+    public void sendValuePrimenimost(String value){
+        inputSearchProduct.waitUntilClickable().click();
+        inputSearchProduct.clear();
+        inputSearchProduct.sendKeys(value);
+        waitABit(300);
+        buttonCheck.click();
+        blockDisplay.waitUntilNotVisible();
     }
 
 }

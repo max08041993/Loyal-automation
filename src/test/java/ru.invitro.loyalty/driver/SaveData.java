@@ -2,14 +2,34 @@ package ru.invitro.loyalty.driver;
 
 public class SaveData {
 
-    private String randomMumber9;
+    private String randomNumber9;
 
-    public void randomMumber9(String randomMumber9) {
-        this.randomMumber9 = randomMumber9;
+    private String nameRandom;
+
+    public int getNumderDeyActions() {
+        return numderDeyActions;
     }
 
-    public String randomMumber9(){
-        return randomMumber9;
+    public void setNumderDeyActions(int numderDeyActions) {
+        this.numderDeyActions = numderDeyActions;
     }
 
+    private int numderDeyActions;
+
+    public String getNameRandom() {
+        return nameRandom;
+    }
+
+    public void setNameRandom(String nameRandom) {
+        this.nameRandom = nameRandom;
+    }
+
+
+    public String getRandomNumber9() {
+        return randomNumber9;
+    }
+
+    public void setRandomNumber9(String randomNumber9) {
+        this.randomNumber9 = randomNumber9;
+    }
 }

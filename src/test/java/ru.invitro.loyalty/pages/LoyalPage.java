@@ -3,12 +3,10 @@ package ru.invitro.loyalty.pages;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.thucydides.core.annotations.Shared;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import ru.invitro.loyalty.driver.SaveData;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,9 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public class LoyalPage extends PageObject {
-
-    @Shared
-    SaveData saveData;
 
     @FindBy(xpath = "//h2")
     WebElementFacade headerPage;
@@ -68,6 +63,9 @@ public class LoyalPage extends PageObject {
     By entryTiragTableRowsPath = By.xpath("//div[@id='main']//tbody/tr"); //Значение в таблице Тиражей
 
     By entryTiragTableCellsPath = By.xpath("./td"); // ячейки таблицы результатов
+
+    @FindBy(xpath = "//div[@class='geography-fog']")
+    WebElementFacade blockGeograf;
 
 
     public void waitSomeTime(long time) {
@@ -230,6 +228,7 @@ public class LoyalPage extends PageObject {
             if (tableRow.get(header).getText().contains(value)) {
                 WebElementFacade searchedElement = tableRow.get(header);
                 searchedElement.waitUntilClickable().click();
+                blockGeograf.waitUntilNotVisible();
                 return;
             }
         }
@@ -300,6 +299,22 @@ public class LoyalPage extends PageObject {
         return String.valueOf(randomMumber9);
     }
 
+    public String generationRandomName(){
+        int max = 0;
+        int min = 9999999;
+        int random_number = max + (int) (Math.random() * min); // Генерация 1-го числа
+        String random_number_str = Integer.toString(random_number);
+        String nameRandom = "Avtotest" + random_number_str;
+        return nameRandom;
+    }
+
+    public String currentDateNow() {
+        LocalDate yesterdayDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dataStr = formatter.format(yesterdayDate);
+        return dataStr;
+    }
+
     public String currentDateAndHour() {
         LocalDate currentDate = LocalDate.now();
         LocalTime currentTime = LocalTime.now();
@@ -309,6 +324,13 @@ public class LoyalPage extends PageObject {
         String timeStr = timeColonFormatter.format(currentTime);
         String dataAndTimeNow = dataStr + " " + timeStr;
         return dataAndTimeNow;
+    }
+
+    public String exactDate(int value) {
+        LocalDate yesterdayDate = LocalDate.now().plusDays(value);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dataStr = formatter.format(yesterdayDate);
+        return dataStr;
     }
 
     public String yesterdayDate() {
