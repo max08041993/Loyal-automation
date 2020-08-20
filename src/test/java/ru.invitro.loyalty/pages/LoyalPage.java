@@ -45,7 +45,7 @@ public class LoyalPage extends PageObject {
     @FindBy(xpath = "//button[@type='submit']")
     WebElementFacade buttonSubmit;
 
-    @FindBys({@FindBy(xpath = "//table[@id='DataTables_Table_0']/thead//th")}) //Названия столбцов в таблице Купонов
+    @FindBys({@FindBy(xpath = "//table[@id='DataTables_Table_0']/thead//th")}) //Названия столбцов в таблице
     List<WebElementFacade> columnsOnProducts;
 
     By entryTableRowsPath = By.xpath("//table[@id='DataTables_Table_0']/tbody/tr"); //таблицы результатов
