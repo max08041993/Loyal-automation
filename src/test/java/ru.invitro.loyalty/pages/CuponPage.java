@@ -211,9 +211,11 @@ public class CuponPage extends LoyalPage {
 
     public void selectGeografCupons(String value) {
         inputSendRegion.click();
+        inputSendRegion.clear();
         inputSendRegion.sendKeys(value);
         buttonSeachRegion.click();
         checkSeachRegion.waitUntilVisible().click();
+        waitABit(1500);
     }
 
     public void selectValueOffice(String fieldName, String value) {
