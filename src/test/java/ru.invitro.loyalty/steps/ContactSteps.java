@@ -1,12 +1,15 @@
 package ru.invitro.loyalty.steps;
 
 import cucumber.api.java.en.When;
-import org.junit.Assert;
+import net.thucydides.core.annotations.Shared;
 import ru.invitro.loyalty.pages.ContactPage;
 
 public class ContactSteps {
 
     ContactPage contactPage;
+
+    @Shared
+    AssertionSteps assertionSteps;
 
     @When("^На странице Контакты ввожу в поле (.*) значение (.*)$")
     public void seachValueInPage (String type, String value){
@@ -15,7 +18,7 @@ public class ContactSteps {
 
     @When("^Проверяю что в таблице поиска в поле (.*) найдено значение (.*)$")
     public void seachValyeInTable(String Type, String value){
-        Assert.assertTrue("В столбце " + Type + " не найдено значение " + value, contactPage.seachValyeInTable(Type,value));
+        assertionSteps.softAssertIsTrue("В столбце " + Type + " не найдено значение " + value, contactPage.seachValyeInTable(Type,value));
     }
 
     @When("^Нажимаю Поиск$")

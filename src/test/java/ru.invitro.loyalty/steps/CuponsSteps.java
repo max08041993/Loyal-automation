@@ -16,6 +16,9 @@ public class CuponsSteps {
     @Shared
     SaveData saveData;
 
+    @Shared
+    AssertionSteps assertionSteps;
+
     @When("^Нажимаю Создать$")
     public void clickCreate(){
         cuponPage.clickCreate();
@@ -100,28 +103,28 @@ public class CuponsSteps {
     @When("^Проверяю что отображается таблица со следующими полями:$")
     public void checkThatTableIsVisible(List<String> columns) {
         for (String ddButtons : columns) {
-            Assert.assertTrue("Отсутсвует столбец " + ddButtons, cuponPage.columnsOnTable(ddButtons));
+            assertionSteps.softAssertIsTrue("Отсутсвует столбец " + ddButtons, cuponPage.columnsOnTable(ddButtons));
         }
     }
 
     @When("^Проверяю что Данные купона и События лояльности содержат следующие строки:$")
     public void checkCuponDan(List<String> listsNames) {
         for (String listNames : listsNames) {
-            Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCouponDan(listNames));
+            assertionSteps.softAssertIsTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCouponDan(listNames));
         }
     }
 
     @When("^Проверяю что Данные карты и События лояльности содержат следующие строки:$")
     public void checkCardDan(List<String> listsNames) {
         for (String listNames : listsNames) {
-            Assert.assertTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCardDan(listNames));
+            assertionSteps.softAssertIsTrue("Данные купона не содержат строчки " + listNames, cuponPage.checkCardDan(listNames));
         }
     }
 
     @When("^Проверяю что на странице присутствует кнопка$")
     public void checkButtonsCupon(List<String> listsNames) {
         for (String listNames : listsNames) {
-            Assert.assertTrue("Кнопка(и) " + listNames + " не обнаружены на странице", cuponPage.checkButtonsCupon(listNames));
+            assertionSteps.softAssertIsTrue("Кнопка(и) " + listNames + " не обнаружены на странице", cuponPage.checkButtonsCupon(listNames));
         }
     }
 
@@ -171,7 +174,7 @@ public class CuponsSteps {
 
     @When("^Проверяю что в поле (.*) отображается ошибка (.*)$")
     public void errorTirag(String type, String value){
-        Assert.assertTrue("Ошибка " + value + " не обнаружена",cuponPage.errorTirag(type,value));
+        assertionSteps.softAssertIsTrue("Ошибка " + value + " не обнаружена",cuponPage.errorTirag(type,value));
     }
 
     @When("Нажимаю Сохранить")
@@ -188,7 +191,7 @@ public class CuponsSteps {
     @When("^Проверяю что информация по Тиражу купонов содержит следующие строки:$")
     public void checkInfoIsEdition(List<String> listsNames){
         for (String listNames : listsNames) {
-            Assert.assertTrue("В информации по тиражу купонов не обнаружено " + listNames, cuponPage.checkInfoIsEdition(listNames));
+            assertionSteps.softAssertIsTrue("В информации по тиражу купонов не обнаружено " + listNames, cuponPage.checkInfoIsEdition(listNames));
         }
     }
 
@@ -205,7 +208,7 @@ public class CuponsSteps {
     @When("^Проверяю что вышла окно Внимание с текстом:$")
     public void checkFailWindowText(List<String> listsNames) {
         for (String listNames : listsNames) {
-            Assert.assertTrue("Текст: " + listNames + " в окне не обнаружен", cuponPage.checkFailWindowText(listNames));
+            assertionSteps.softAssertIsTrue("Текст: " + listNames + " в окне не обнаружен", cuponPage.checkFailWindowText(listNames));
         }
         cuponPage.clicButtonOk();
     }
@@ -219,13 +222,13 @@ public class CuponsSteps {
     @When("^Проверяю что Дата активации купона равен текущей дате$")
     public void checkDataCuponValueNow(){
         String dataNow = cuponPage.currentDateNow();
-            Assert.assertTrue("Дата активации купона не равна текущей", cuponPage.checkDataCuponValueNow(dataNow));
+            assertionSteps.softAssertIsTrue("Дата активации купона не равна текущей", cuponPage.checkDataCuponValueNow(dataNow));
     }
 
     @When("^Проверяю что Срок действия купона равен сроку действия в шаблоне$")
     public void checkValidCupon(){
         String dataNow = cuponPage.exactDate(saveData.getNumderDeyActions());
-        Assert.assertTrue("Срок действия купона не равен значению в шаблоне тиража", cuponPage.checkValidCupon(dataNow));
+        assertionSteps.softAssertIsTrue("Срок действия купона не равен значению в шаблоне тиража", cuponPage.checkValidCupon(dataNow));
     }
 
     @When("^В поле Применимость к продукту ввожу (.*) и нажимаю Проверить$")
@@ -236,7 +239,7 @@ public class CuponsSteps {
     @When("^Проверяю что блок Проверка правила содержит текст:$")
     public void checkRulesProduct(List<String> listsNames){
         for (String listNames : listsNames) {
-            Assert.assertTrue("Отсутсвует строка " + listNames + " в блоке проверки применимости продукта", cuponPage.checkRulesProduct(listNames));
+            assertionSteps.softAssertIsTrue("Отсутсвует строка " + listNames + " в блоке проверки применимости продукта", cuponPage.checkRulesProduct(listNames));
         }
     }
 
