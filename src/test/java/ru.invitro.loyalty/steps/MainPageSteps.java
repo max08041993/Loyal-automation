@@ -3,12 +3,16 @@ package ru.invitro.loyalty.steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import net.thucydides.core.annotations.Shared;
 import org.junit.Assert;
 import ru.invitro.loyalty.pages.LoyalPage;
 
 public class MainPageSteps {
 
     LoyalPage loyalPage;
+
+    @Shared
+    AssertionSteps assertionSteps;
 
     @Given("^Открываю страницу Loyal$")
     public void openMainPage() {
