@@ -369,4 +369,20 @@ public class LoyalPage extends PageObject {
         return dataAndTimeTomorrow;
     }
 
+    @FindBy(xpath = "//a[.='Редактировать']")
+    WebElementFacade buttonEdit;
+
+    public void clickEdit(){
+        buttonEdit.click();
+    }
+
+    @FindBy(xpath = "//a[.='Назад']")
+    WebElementFacade buttonBack;
+
+    public void clickBack(){
+        waitABit(300);
+        buttonBack.click();
+        waitABit(300);
+    }
+
 }

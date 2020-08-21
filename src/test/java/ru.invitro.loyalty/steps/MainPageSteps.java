@@ -66,6 +66,16 @@ public class MainPageSteps {
         loyalPage.sendNumberCupon(value);
     }
 
+    @When("^Нажимаю Редактировать$")
+    public void clickEdit(){
+        loyalPage.clickEdit();
+    }
+
+    @When("Нажимаю Назад")
+    public void clickBack(){
+        loyalPage.clickBack();
+    }
+
 
 
 

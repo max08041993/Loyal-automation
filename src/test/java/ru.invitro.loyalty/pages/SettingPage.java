@@ -1,14 +1,19 @@
 package ru.invitro.loyalty.pages;
 
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.annotations.Shared;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
+import ru.invitro.loyalty.steps.AssertionSteps;
 
 import java.util.List;
 
 public class SettingPage extends LoyalPage{
+
+    @Shared
+    AssertionSteps assertionSteps;
 
     @FindBys(@FindBy(xpath = "//table[@id='DataTables_Table_0']//td[@class='sorting_1']/a"))
     List<WebElementFacade> listRegionSetting;
@@ -57,6 +62,49 @@ public class SettingPage extends LoyalPage{
             return true;
         }else
             return false;
+    }
+
+    @FindBys(@FindBy(xpath = "//div[@class='panel-body']//label"))
+    List<WebElementFacade> listNameTypeSobstv;
+
+    By inputCheckBox1NameSobstv = By.xpath("./following::input[1]");
+
+    public boolean checkSettingSumm (String type){
+        for (WebElementFacade element : listNameTypeSobstv) {
+            if (element.getText().replaceAll("[\r\n]", " ").equals(type)) {
+                WebElementFacade input = element.find(inputCheckBox1NameSobstv);
+                boolean result = false;
+                try {
+                    if (input.getAttribute("checked").equals("true")){
+                        result = true;
+                    }
+                } catch (Exception e) {}
+                return result;
+                }
+            }
+        return false;
+    }
+
+    By inputCheckBox2NameSobstv = By.xpath("./following::input[2]");
+
+    public void clickCheckBoxSettingSumm (String type){
+        for (WebElementFacade element : listNameTypeSobstv) {
+            if (element.getText().replaceAll("[\r\n]", " ").equals(type)) {
+                WebElementFacade input = element.find(inputCheckBox2NameSobstv);
+                input.click();
+                return;
+            }
+        }
+        Assert.fail("Не найдено поле " + type);
+    }
+
+    @FindBy(xpath = "//button[@id='saveButton']")
+    WebElementFacade buttonSave;
+
+    public void clickSettingSummSaveButton(){
+        waitABit(300);
+        buttonSave.click();
+        waitABit(300);
     }
 
 }
